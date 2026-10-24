@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>East Millard Sheriff Posse | Search &amp; Rescue</title>
+<meta name="description" content="Volunteer search and rescue activity for the East Millard Sheriff Posse, Millard County, Utah: callouts, training, hours and miles.">
+<meta name="theme-color" content="#1e4d36">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="East Millard Sheriff Posse | Search & Rescue">
+<meta property="og:description" content="Team activity: callouts, training, volunteer hours and miles.">
+<meta property="og:image" content="icon-512.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --green: #1e4d36; --green2: #163a29; --gold: #d4a93c; --bg: #dfe7e1; --card: #fff;
+    --text: #1a1f1c; --muted: #4d5a52; --line: #d3ddd6; --soft: #e8f1eb;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font: 18px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  a { color: var(--green); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+  /* Top ribbon (stays put while scrolling) */
+  .top { position: sticky; top: 0; z-index: 10; background: var(--green); color: #fff;
+    border-bottom: 3px solid var(--gold); box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 10px; padding-bottom: 10px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-width: 0; }
+  .brand img { width: 42px; height: 42px; border-radius: 50%; flex: none; }
+  .brand b { font-size: 21px; line-height: 1.2; }
+  .brand b span { white-space: nowrap; }
+  .login { flex: none; background: var(--gold); color: #1a1f1c; text-decoration: none; font-weight: 700;
+    padding: 9px 16px; border-radius: 9px; font-size: 16px; white-space: nowrap; }
+  .login:hover { background: #e2bb55; }
+
+  /* Hero */
+  .hero { background: linear-gradient(180deg, var(--green2), var(--green)); color: #fff; padding: 34px 0 72px; }
+  .hero .wrap { display: flex; align-items: center; gap: 28px; }
+  .hero img { width: 150px; height: 150px; border-radius: 50%; flex: none; box-shadow: 0 6px 22px rgba(0,0,0,.35); }
+  .hero h1 { margin: 0 0 6px; font-size: 34px; line-height: 1.15; }
+  .hero p { margin: 0; font-size: 18px; color: #d9e8de; max-width: 620px; }
+  .hero .kicker { color: var(--gold); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; margin-bottom: 6px; }
+
+  main { margin-top: -48px; padding-bottom: 40px; }
+  .sec { background: var(--card); border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.08); margin-bottom: 18px; overflow: hidden; }
+  .bar { background: var(--green); color: #fff; font-weight: 700; padding: 12px 18px; display: flex;
+    justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 19px; }
+  .body { padding: 18px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tile { background: var(--soft); border-radius: 12px; padding: 14px 10px; text-align: center; }
+  .tile .val { font-size: 32px; font-weight: 800; color: var(--green); line-height: 1.15; }
+  .tile .lbl { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); font-weight: 700; margin-top: 4px; }
+
+  select.yr { font: inherit; font-size: 16px; font-weight: 600; padding: 6px 10px; border-radius: 8px; border: 0; color: var(--text); }
+  .seg { display: inline-flex; background: rgba(255,255,255,.15); border-radius: 8px; overflow: hidden; }
+  .seg button { background: none; border: 0; color: #fff; padding: 7px 14px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .seg button.on { background: #fff; color: var(--green); }
+  .seg button:focus-visible, select.yr:focus-visible, .login:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .chartbox { position: relative; height: 340px; }
+
+  .types { display: grid; gap: 14px; }
+  .trow .tl { display: flex; justify-content: space-between; gap: 10px; font-weight: 700; margin-bottom: 5px; flex-wrap: wrap; }
+  .trow .tl small { font-weight: 400; color: var(--muted); font-size: 15px; }
+  .track { height: 14px; background: var(--soft); border-radius: 7px; overflow: hidden; }
+  .track div { height: 100%; background: var(--green); border-radius: 7px; }
+
+  .note { font-size: 15px; color: var(--muted); margin: 12px 0 0; }
+  .cta { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .cta p { margin: 0; }
+  .btn { display: inline-block; background: var(--green); color: #fff; text-decoration: none; font-weight: 700;
+    padding: 13px 26px; border-radius: 10px; }
+  .loading { text-align: center; color: var(--muted); padding: 40px 0; }
+  footer { text-align: center; font-size: 14px; color: var(--muted); padding: 10px 16px 30px; }
+
+  @media (max-width: 760px) {
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding: 24px 0 64px; }
+    .hero .wrap { flex-direction: column; text-align: center; gap: 14px; }
+    .hero img { width: 112px; height: 112px; }
+    .hero h1 { font-size: 26px; }
+    .hero p { font-size: 16px; }
+    .chartbox { height: 260px; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 17px; }
+    .brand b { font-size: 16px; }
+    .brand img { width: 34px; height: 34px; }
+    .login { padding: 8px 12px; font-size: 15px; }
+    .tile .val { font-size: 26px; }
+    .body { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="logo.png" alt=""><b><span>East Millard</span> <span>Sheriff Posse</span></b></a>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <img src="badge.png" alt="Millard County Sheriff Search and Rescue badge">
+  <div>
+    <div class="kicker">Millard County, Utah</div>
+    <h1>Search &amp; Rescue Team Activity</h1>
+    <p>The East Millard Sheriff Posse is a volunteer search and rescue team. These numbers update automatically as members log callouts, training, meetings and equipment work.</p>
+  </div>
+</div></div>
+
+<main class="wrap" id="main"><section class="sec"><div class="body loading">Loading team stats…</div></section></main>
+
+<footer>East Millard Sheriff Posse · Millard County Sheriff's Office Search &amp; Rescue</footer>
+
+<script>
+/* Live team totals come from the posse's Duty Log (numbers only, no names). */
+const STATS_URL = 'https://script.google.com/macros/s/AKfycbxEvNAnlTXmXT5aq02fkyDnERltqtb9bQavgBwEdtMngg9Kor_mrzu_5adDEQMD5q-C/exec?view=stats';
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const LABEL = { tf: 'Missions & events', h: 'Volunteer hours', mi: 'Miles driven' };
+const TYPE_NAMES = { 'Monthly report': 'Monthly reports (older form)' };
+const st = { data: null, year: new Date().getFullYear(), metric: 'h', chart: null };
+
+const $ = id => document.getElementById(id);
+const n0 = x => Math.round(x || 0).toLocaleString();
+const money = x => '$' + Math.round(x || 0).toLocaleString();
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ym = (y, m) => y + '-' + String(m + 1).padStart(2, '0');
+function sum(list) {
+  let f = 0, tf = 0, h = 0, mi = 0;
+  list.forEach(t => { f += t.f || 0; tf += t.tf != null ? t.tf : (t.f || 0); h += t.h || 0; mi += t.mi || 0; });
+  return { f, tf, h, mi, v: h * st.data.hourRate + mi * st.data.mileRate };
+}
+const section = (title, body, extra) =>
+  `<section class="sec"><div class="bar"><span>${title}</span>${extra || ''}</div><div class="body">${body}</div></section>`;
+
+function render() {
+  const d = st.data, cy = new Date().getFullYear(), y = st.year;
+  const years = [...new Set(d.team.map(t => +t.ym.slice(0, 4)).concat(cy))].sort((a, b) => b - a);
+  const items = d.team.filter(t => +t.ym.slice(0, 4) === y);
+  const t = sum(items);
+  const tile = (v, l) => `<div class="tile"><div class="val">${v}</div><div class="lbl">${l}</div></div>`;
+  const yearSel = `<select class="yr" id="yr" aria-label="Year">${years.map(v => `<option ${v === y ? 'selected' : ''}>${v}</option>`).join('')}</select>`;
+
+  let html = section(y === cy ? `${y} · Year to Date` : `${y} · Full Year`,
+    `<div class="tiles">${tile(n0(t.h), 'Volunteer hours')}${tile(n0(t.mi), 'Miles driven')}${tile(n0(t.tf), 'Missions &amp; events')}
+      ${tile(n0(t.f), 'Member turnouts')}${tile(n0(d.membersByYear[y] || 0), 'Members reporting')}${tile(money(t.v), 'Value of service')}</div>
+     <p class="note">Value of service = volunteer hours × $${d.hourRate} + miles × $${d.mileRate.toFixed(2)}. Missions &amp; events count each callout, training, meeting or work session once per day; member turnouts count every member who took part.</p>`, yearSel);
+
+  const seg = `<div class="seg" role="group" aria-label="Chart measure">${Object.keys(LABEL).map(k =>
+    `<button type="button" data-m="${k}" class="${st.metric === k ? 'on' : ''}">${k === 'h' ? 'Hours' : k === 'mi' ? 'Miles' : 'Missions'}</button>`).join('')}</div>`;
+  html += section(`${LABEL[st.metric]} by Month`, `<div class="chartbox"><canvas id="ch" aria-label="${LABEL[st.metric]} by month, ${y} compared with ${y - 1}"></canvas></div>`, seg);
+
+  const byType = {};
+  items.forEach(x => { (byType[x.type] = byType[x.type] || []).push(x); });
+  const order = d.types;
+  const keys = Object.keys(byType).sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  const maxH = Math.max(1, ...keys.map(k => sum(byType[k]).h));
+  const rows = keys.map(k => {
+    const s = sum(byType[k]);
+    return `<div class="trow"><div class="tl"><span>${esc(TYPE_NAMES[k] || k)}</span>
+      <small>${n0(s.h)} hr · ${n0(s.mi)} mi · ${n0(s.tf)} time${Math.round(s.tf) === 1 ? '' : 's'}</small></div>
+      <div class="track"><div style="width:${(s.h / maxH * 100).toFixed(1)}%"></div></div></div>`;
+  }).join('');
+  html += section(`Where the Time Goes · ${y}`, rows ? `<div class="types">${rows}</div>` : '<p class="note">No activity logged yet this year.</p>');
+
+  if (d.updated) html += `<p class="note" style="text-align:center">Updated ${new Date(d.updated).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</p>`;
+
+  $('main').innerHTML = html;
+  $('yr').onchange = ev => { st.year = +ev.target.value; render(); };
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { st.metric = b.dataset.m; render(); });
+
+  const series = yr => MONTHS.map((_, m) => sum(d.team.filter(x => x.ym === ym(yr, m)))[st.metric]);
+  if (st.chart) { st.chart.destroy(); st.chart = null; }
+  if (window.Chart) {
+    st.chart = new Chart($('ch'), {
+      type: 'bar',
+      data: { labels: MONTHS, datasets: [
+        { label: String(y - 1), data: series(y - 1), backgroundColor: '#a9c7b5', borderRadius: 4 },
+        { label: String(y), data: series(y), backgroundColor: '#1e4d36', borderRadius: 4 }
+      ] },
+      options: { maintainAspectRatio: false, animation: { duration: 400 },
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 14 } } },
+          tooltip: { callbacks: { label: c => `${c.dataset.label}: ${Math.round(c.parsed.y).toLocaleString()} ${st.metric === 'h' ? 'hours' : st.metric === 'mi' ? 'miles' : 'missions & events'}` } } },
+        scales: { y: { beginAtZero: true, ticks: { font: { size: 13 } } }, x: { ticks: { font: { size: 13 } } } } }
+    });
+  }
+}
+
+fetch(STATS_URL).then(r => r.json()).then(j => {
+  if (!j.ok) throw new Error(j.error || 'No data');
+  st.data = j.data; render();
+}).catch(() => {
+  $('main').innerHTML = section('Team Stats', '<p>Team stats are not available right now. Please check back later.</p>');
+});
+</script>
+</body>
+</html>
