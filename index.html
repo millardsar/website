@@ -126,7 +126,7 @@
     <h1>Search &amp; Rescue Team Activity</h1>
     <p>Search and rescue services in Millard County are provided under the direction of the Millard County Sheriff's Office. Volunteer members are organized into two teams, the East Posse and the West Posse, who respond to callouts, train together and maintain the equipment the teams rely on. These numbers update automatically as members log callouts, training, meetings and equipment work.</p>
     <div class="views" id="views" role="group" aria-label="Show activity for">
-      <button type="button" data-v="all" class="on">Both posses</button><button type="button" data-v="east">East Posse</button><button type="button" data-v="west">West Posse</button>
+      <button type="button" data-v="all" class="on">Countywide</button><button type="button" data-v="east">East Posse</button><button type="button" data-v="west">West Posse</button>
     </div>
   </div>
 </div></div>
@@ -144,7 +144,7 @@ const FEEDS = {
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const LABEL = { tf: 'Missions & events', h: 'Volunteer hours', mi: 'Miles driven' };
 const TYPE_NAMES = { 'Monthly report': 'Monthly reports (older form)' };
-const VIEW_NAMES = { all: 'Both posses', east: 'East Posse', west: 'West Posse' };
+const VIEW_NAMES = { all: 'Countywide', east: 'East Posse', west: 'West Posse' };
 const st = { feeds: {}, view: 'all', data: null, year: new Date().getFullYear(), metric: 'h', chart: null };
 try { const v = localStorage.getItem('sarView'); if (v && VIEW_NAMES[v]) st.view = v; } catch (e) {}
 
