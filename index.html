@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>East Millard Sheriff Posse | Search &amp; Rescue</title>
-<meta name="description" content="Volunteer search and rescue activity for the East Millard Sheriff Posse, Millard County, Utah: callouts, training, hours and miles.">
+<title>Millard County Sheriff Search &amp; Rescue</title>
+<meta name="description" content="Volunteer search and rescue activity for the East and West Millard Sheriff Posses, Millard County, Utah: callouts, training, hours and miles.">
 <meta name="theme-color" content="#1e4d36">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta property="og:title" content="East Millard Sheriff Posse | Search & Rescue">
+<meta property="og:title" content="Millard County Sheriff Search & Rescue">
 <meta property="og:description" content="Team activity: callouts, training, volunteer hours and miles.">
 <meta property="og:image" content="icon-512.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -36,7 +36,7 @@
   .login:hover { background: #e2bb55; }
 
   /* Hero */
-  .hero { background: linear-gradient(180deg, var(--green2), var(--green)); color: #fff; padding: 34px 0 72px; }
+  .hero { background: linear-gradient(180deg, var(--green2), var(--green)); color: #fff; padding: 40px 0 72px; border-top: 4px solid var(--gold); }
   .hero .wrap { display: flex; align-items: center; gap: 28px; }
   .hero img { width: 150px; height: 150px; border-radius: 50%; flex: none; box-shadow: 0 6px 22px rgba(0,0,0,.35); }
   .hero h1 { margin: 0 0 6px; font-size: 34px; line-height: 1.15; }
@@ -44,13 +44,23 @@
   .hero .kicker { color: var(--gold); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; margin-bottom: 6px; }
 
   main { margin-top: -48px; padding-bottom: 40px; }
-  .sec { background: var(--card); border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.08); margin-bottom: 18px; overflow: hidden; }
-  .bar { background: var(--green); color: #fff; font-weight: 700; padding: 12px 18px; display: flex;
+  .sec { background: var(--card); border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.08); margin-bottom: 18px; overflow: visible; }
+  .bar { border-radius: 14px 14px 0 0; background: var(--green); color: #fff; font-weight: 700; padding: 12px 18px; display: flex;
     justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 19px; }
   .body { padding: 18px; }
 
-  .tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .tile { background: var(--soft); border-radius: 12px; padding: 14px 10px; text-align: center; }
+  .tile { position: relative; cursor: help; outline: none; }
+  .tile .i { position: absolute; top: 8px; right: 10px; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--muted);
+    color: var(--muted); font: 700 13px/19px Arial, sans-serif; text-align: center; }
+  .tile .tip { display: none; pointer-events: none; position: absolute; left: 8px; right: 8px; top: calc(100% - 6px); z-index: 5; background: #1a1f1c; color: #fff;
+    font-size: 15px; line-height: 1.4; font-weight: 400; padding: 10px 12px; border-radius: 8px; text-align: left; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+  .tile .tip:before { content: ''; position: absolute; top: -6px; right: 14px; border: 6px solid transparent; border-top: 0; border-bottom-color: #1a1f1c; }
+  .tile.open .tip { display: block; }
+  .tile.open .i, .tile:focus-visible .i { background: var(--green); border-color: var(--green); color: #fff; }
+  .tile:focus-visible { box-shadow: 0 0 0 3px var(--gold); }
+  @media (hover: hover) { .tile:hover .tip { display: block; } .tile:hover .i { background: var(--green); border-color: var(--green); color: #fff; } }
   .tile .val { font-size: 32px; font-weight: 800; color: var(--green); line-height: 1.15; }
   .tile .lbl { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); font-weight: 700; margin-top: 4px; }
 
@@ -60,6 +70,11 @@
   .seg button.on { background: #fff; color: var(--green); }
   .seg button:focus-visible, select.yr:focus-visible, .login:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   .chartbox { position: relative; height: 340px; }
+  .tblwrap { overflow-x: auto; }
+  table.ptab { width: 100%; border-collapse: collapse; font-size: 17px; }
+  .ptab th { text-align: right; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); padding: 6px 8px; }
+  .ptab td { text-align: right; padding: 9px 8px; border-top: 1px solid var(--line); }
+  .ptab td:first-child { text-align: left; font-weight: 700; }
 
   .types { display: grid; gap: 14px; }
   .trow .tl { display: flex; justify-content: space-between; gap: 10px; font-weight: 700; margin-bottom: 5px; flex-wrap: wrap; }
@@ -67,6 +82,10 @@
   .track { height: 14px; background: var(--soft); border-radius: 7px; overflow: hidden; }
   .track div { height: 100%; background: var(--green); border-radius: 7px; }
 
+  .views { display: inline-flex; flex-wrap: wrap; margin-top: 16px; background: rgba(255,255,255,.12); border-radius: 10px; padding: 4px; gap: 4px; }
+  .views button { background: none; border: 0; color: #e8f1eb; font: inherit; font-size: 16px; font-weight: 700; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+  .views button.on { background: var(--gold); color: #1a1f1c; }
+  .views button:focus-visible { outline: 3px solid #fff; outline-offset: 1px; }
   .note { font-size: 15px; color: var(--muted); margin: 12px 0 0; }
   .cta { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
   .cta p { margin: 0; }
@@ -77,7 +96,6 @@
 
   @media (max-width: 760px) {
     .tiles { grid-template-columns: repeat(2, 1fr); }
-    .tiles .tile:last-child { grid-column: span 2; }
     .hero { padding: 24px 0 64px; }
     .hero .wrap { flex-direction: column; text-align: center; gap: 14px; }
     .hero img { width: 112px; height: 112px; }
@@ -86,40 +104,49 @@
     .chartbox { height: 260px; }
   }
   @media (max-width: 560px) {
+    .views { display: flex; width: 100%; }
+    .views button { flex: 1; font-size: 15px; padding: 9px 4px; }
+    table.ptab { font-size: 15px; }
+    .ptab th { font-size: 11px; letter-spacing: 0; padding: 6px 4px; }
+    .ptab td { padding: 9px 4px; }
     body { font-size: 17px; }
     .brand b { font-size: 16px; }
     .brand img { width: 34px; height: 34px; }
     .login { padding: 8px 12px; font-size: 15px; }
-    .tile .val { font-size: 26px; }
+    .tile .val { font-size: 26px; padding: 0 16px; }
     .body { padding: 14px; }
   }
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <a class="brand" href="./"><img src="logo.png" alt=""><b><span>East Millard</span> <span>Sheriff Posse</span></b></a>
-</div></header>
-
 <div class="hero"><div class="wrap">
   <img src="badge.png" alt="Millard County Sheriff Search and Rescue badge">
   <div>
-    <div class="kicker">Millard County, Utah</div>
+    <div class="kicker">Millard County Sheriff's Office</div>
     <h1>Search &amp; Rescue Team Activity</h1>
-    <p>The East Millard Sheriff Posse is a volunteer search and rescue team. These numbers update automatically as members log callouts, training, meetings and equipment work.</p>
+    <p>Search and rescue services in Millard County are provided under the direction of the Millard County Sheriff's Office. Volunteer members are organized into two teams, the East Posse and the West Posse, who respond to callouts, train together and maintain the equipment the teams rely on. These numbers update automatically as members log callouts, training, meetings and equipment work.</p>
+    <div class="views" id="views" role="group" aria-label="Show activity for">
+      <button type="button" data-v="all" class="on">Both posses</button><button type="button" data-v="east">East Posse</button><button type="button" data-v="west">West Posse</button>
+    </div>
   </div>
 </div></div>
 
 <main class="wrap" id="main"><section class="sec"><div class="body loading">Loading team stats…</div></section></main>
 
-<footer>East Millard Sheriff Posse · Millard County Sheriff's Office Search &amp; Rescue</footer>
+<footer>East &amp; West Millard Sheriff Posses · Millard County Sheriff's Office Search &amp; Rescue</footer>
 
 <script>
-/* Live team totals come from the posse's Duty Log (numbers only, no names). */
-const STATS_URL = 'https://script.google.com/macros/s/AKfycbxEvNAnlTXmXT5aq02fkyDnERltqtb9bQavgBwEdtMngg9Kor_mrzu_5adDEQMD5q-C/exec?view=stats';
+/* Live team totals from each posse's Duty Log (numbers only, no names). */
+const FEEDS = {
+  east: { label: 'East Posse', url: 'https://script.google.com/macros/s/AKfycbxEvNAnlTXmXT5aq02fkyDnERltqtb9bQavgBwEdtMngg9Kor_mrzu_5adDEQMD5q-C/exec?view=stats' },
+  west: { label: 'West Posse', url: 'https://script.google.com/macros/s/AKfycbxFThRjmoVf-DIjqteTdCBKMw3_WwB1CcjQpYVxRdtLiinv1Y3-vq7D2Y01-jT4Dh7P/exec?view=stats' }
+};
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const LABEL = { f: 'Functions', h: 'Volunteer hours', mi: 'Miles driven' };
+const LABEL = { tf: 'Missions & events', h: 'Volunteer hours', mi: 'Miles driven' };
 const TYPE_NAMES = { 'Monthly report': 'Monthly reports (older form)' };
-const st = { data: null, year: new Date().getFullYear(), metric: 'h', chart: null };
+const VIEW_NAMES = { all: 'Both posses', east: 'East Posse', west: 'West Posse' };
+const st = { feeds: {}, view: 'all', data: null, year: new Date().getFullYear(), metric: 'h', chart: null };
+try { const v = localStorage.getItem('sarView'); if (v && VIEW_NAMES[v]) st.view = v; } catch (e) {}
 
 const $ = id => document.getElementById(id);
 const n0 = x => Math.round(x || 0).toLocaleString();
@@ -127,29 +154,94 @@ const money = x => '$' + Math.round(x || 0).toLocaleString();
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ym = (y, m) => y + '-' + String(m + 1).padStart(2, '0');
 function sum(list) {
-  let f = 0, h = 0, mi = 0;
-  list.forEach(t => { f += t.f || 0; h += t.h || 0; mi += t.mi || 0; });
-  return { f, h, mi, v: h * st.data.hourRate + mi * st.data.mileRate };
+  let f = 0, tf = 0, h = 0, mi = 0, v = 0;
+  list.forEach(t => { f += t.f || 0; tf += t.tf != null ? t.tf : (t.f || 0); h += t.h || 0; mi += t.mi || 0; v += t.v || 0; });
+  return { f, tf, h, mi, v };
 }
 const section = (title, body, extra) =>
   `<section class="sec"><div class="bar"><span>${title}</span>${extra || ''}</div><div class="body">${body}</div></section>`;
 
+/** One posse's feed, with each row's dollar value worked out at that posse's own rates. */
+function prep(d) {
+  return Object.assign({}, d, { team: d.team.map(t => Object.assign({}, t, { v: t.h * d.hourRate + t.mi * d.mileRate })) });
+}
+
+/** East + West together. A joint mission worked by both posses on the same day counts as one mission/event. */
+function combine(list) {
+  const rows = {}, members = {}, keyCount = {};
+  list.forEach(d => {
+    d.team.forEach(t => {
+      const k = t.ym + '|' + t.type;
+      const r = rows[k] || (rows[k] = { ym: t.ym, type: t.type, f: 0, tf: 0, h: 0, mi: 0, v: 0 });
+      r.f += t.f || 0; r.tf += t.tf != null ? t.tf : (t.f || 0); r.h += t.h || 0; r.mi += t.mi || 0; r.v += t.v || 0;
+    });
+    Object.keys(d.membersByYear || {}).forEach(y => { members[y] = (members[y] || 0) + d.membersByYear[y]; });
+    (d.jointKeys || []).forEach(j => { (keyCount[j.key] = keyCount[j.key] || { n: 0, j: j }).n++; });
+  });
+  Object.keys(keyCount).forEach(k => {
+    const x = keyCount[k];
+    if (x.n < 2) return;
+    const r = rows[x.j.ym + '|' + x.j.type];
+    if (r) r.tf = Math.max(0, r.tf - (x.n - 1));
+  });
+  const types = [];
+  list.forEach(d => (d.types || []).forEach(t => { if (types.indexOf(t) < 0) types.push(t); }));
+  const updated = list.map(d => d.updated).filter(Boolean).sort().pop();
+  return { team: Object.keys(rows).map(k => rows[k]), membersByYear: members, types: types, updated: updated, rates: list.map(d => d) };
+}
+
+function pickView() {
+  const have = Object.keys(st.feeds);
+  if (st.view !== 'all' && !st.feeds[st.view]) st.view = 'all';
+  st.data = st.view === 'all' ? combine(have.map(k => st.feeds[k])) : combine([st.feeds[st.view]]);
+}
+
 function render() {
+  pickView();
+  document.querySelectorAll('#views button').forEach(b => {
+    b.classList.toggle('on', b.dataset.v === st.view);
+    b.disabled = b.dataset.v !== 'all' && !st.feeds[b.dataset.v];
+  });
   const d = st.data, cy = new Date().getFullYear(), y = st.year;
   const years = [...new Set(d.team.map(t => +t.ym.slice(0, 4)).concat(cy))].sort((a, b) => b - a);
   const items = d.team.filter(t => +t.ym.slice(0, 4) === y);
   const t = sum(items);
-  const tile = (v, l) => `<div class="tile"><div class="val">${v}</div><div class="lbl">${l}</div></div>`;
+  let tipN = 0;
+  const tile = (v, l, def) => { const id = 'tip' + (++tipN);
+    return `<div class="tile" tabindex="0" role="button" aria-describedby="${id}"><span class="i" aria-hidden="true">i</span><div class="val">${v}</div><div class="lbl">${l}</div><div class="tip" role="tooltip" id="${id}">${def}</div></div>`; };
   const yearSel = `<select class="yr" id="yr" aria-label="Year">${years.map(v => `<option ${v === y ? 'selected' : ''}>${v}</option>`).join('')}</select>`;
+  // Rates come from each posse's Settings tab (Hourly rate / Mileage rate)
+  const hr = x => '$' + (Number(x) % 1 ? Number(x).toFixed(2) : Number(x));
+  const rateText = r => `Volunteer Hours @ ${hr(r.hourRate)}/hr<br>Mileage @ $${Number(r.mileRate).toFixed(2)} per mile`;
+  const rateList = d.rates.map(rateText);
+  const sameRates = rateList.every(x => x === rateList[0]);
+  const rates = sameRates ? rateList[0] : d.rates.map(r => `${esc(r.posse || '')}: ${rateText(r)}`).join('<br>');
+  const missing = Object.keys(FEEDS).filter(k => !st.feeds[k]).map(k => FEEDS[k].label);
+  const who = VIEW_NAMES[st.view];
 
-  let html = section(y === cy ? `${y} · Year to Date` : `${y} · Full Year`,
-    `<div class="tiles">${tile(n0(t.h), 'Volunteer hours')}${tile(n0(t.mi), 'Miles driven')}${tile(n0(t.f), 'Functions')}
-      ${tile(money(t.v), 'Value of service')}${tile(n0(d.membersByYear[y] || 0), 'Members reporting')}</div>
-     <p class="note">Value of service = volunteer hours × $${d.hourRate} + miles × $${d.mileRate.toFixed(2)}. A function is one callout, training, meeting or work session.</p>`, yearSel);
+  let html = section(`${esc(who)} · ${y === cy ? `${y} Year to Date` : `${y} Full Year`}`,
+    `<div class="tiles">${tile(n0(t.h), 'Volunteer hours', 'Time members logged on missions and events, including travel, counted in half hours.')}
+      ${tile(n0(t.mi), 'Miles driven', 'Miles members drove in service, to and from missions and events.')}
+      ${tile(n0(t.tf), 'Missions &amp; events', 'Each callout, training, meeting or work session, counted once for each day it was worked' + (st.view === 'all' ? '. A joint East–West mission counts once.' : '.'))}
+      ${tile(n0(t.f), 'Member turnouts', 'Each time a member took part in a mission or event. For example, 6 members on one callout = 6 turnouts.')}
+      ${tile(n0(d.membersByYear[y] || 0), 'Members reporting', `Members who logged any activity in ${y}.`)}
+      ${tile(money(t.v), 'Value of service', `<b>Value of service:</b><br>${rates}`)}</div>
+     <p class="note">Tap or hover over a box to see what it means.</p>
+     ${missing.length && st.view === 'all' ? `<p class="note">${esc(missing.join(' and '))} numbers are not available right now, so they are not included.</p>` : ''}`, yearSel);
 
   const seg = `<div class="seg" role="group" aria-label="Chart measure">${Object.keys(LABEL).map(k =>
-    `<button type="button" data-m="${k}" class="${st.metric === k ? 'on' : ''}">${k === 'h' ? 'Hours' : k === 'mi' ? 'Miles' : 'Functions'}</button>`).join('')}</div>`;
+    `<button type="button" data-m="${k}" class="${st.metric === k ? 'on' : ''}">${k === 'h' ? 'Hours' : k === 'mi' ? 'Miles' : 'Missions'}</button>`).join('')}</div>`;
   html += section(`${LABEL[st.metric]} by Month`, `<div class="chartbox"><canvas id="ch" aria-label="${LABEL[st.metric]} by month, ${y} compared with ${y - 1}"></canvas></div>`, seg);
+
+  // Side-by-side East vs West, only in the combined view
+  if (st.view === 'all' && Object.keys(st.feeds).length > 1) {
+    const per = Object.keys(FEEDS).filter(k => st.feeds[k]).map(k => {
+      const x = sum(combine([st.feeds[k]]).team.filter(r => +r.ym.slice(0, 4) === y));
+      return `<tr><td>${esc(FEEDS[k].label.replace(' Posse', ''))}</td><td>${n0(x.h)}</td><td>${n0(x.mi)}</td><td>${n0(x.tf)}</td><td>${n0(x.f)}</td></tr>`;
+    }).join('');
+    html += section(`By Posse · ${y}`, `<div class="tblwrap"><table class="ptab"><tr><th></th><th>Hours</th><th>Miles</th><th>Missions</th><th>Turnouts</th></tr>${per}</table></div>
+      <p class="note">Tap East Posse or West Posse at the top to see one posse on its own.</p>`);
+  }
 
   const byType = {};
   items.forEach(x => { (byType[x.type] = byType[x.type] || []).push(x); });
@@ -159,7 +251,7 @@ function render() {
   const rows = keys.map(k => {
     const s = sum(byType[k]);
     return `<div class="trow"><div class="tl"><span>${esc(TYPE_NAMES[k] || k)}</span>
-      <small>${n0(s.h)} hr · ${n0(s.mi)} mi · ${n0(s.f)} function${Math.round(s.f) === 1 ? '' : 's'}</small></div>
+      <small>${n0(s.h)} hr · ${n0(s.mi)} mi · ${n0(s.tf)} time${Math.round(s.tf) === 1 ? '' : 's'}</small></div>
       <div class="track"><div style="width:${(s.h / maxH * 100).toFixed(1)}%"></div></div></div>`;
   }).join('');
   html += section(`Where the Time Goes · ${y}`, rows ? `<div class="types">${rows}</div>` : '<p class="note">No activity logged yet this year.</p>');
@@ -167,10 +259,17 @@ function render() {
   if (d.updated) html += `<p class="note" style="text-align:center">Updated ${new Date(d.updated).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</p>`;
 
   $('main').innerHTML = html;
+  // Definitions: hover on a computer, tap on a phone (one open at a time); Esc or tapping elsewhere closes
+  document.querySelectorAll('.tile').forEach(tl => {
+    const toggle = () => { const was = tl.classList.contains('open'); document.querySelectorAll('.tile.open').forEach(x => x.classList.remove('open')); if (!was) tl.classList.add('open'); };
+    tl.onclick = ev => { ev.stopPropagation(); toggle(); };
+    tl.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggle(); } };
+    tl.onblur = () => tl.classList.remove('open');
+  });
   $('yr').onchange = ev => { st.year = +ev.target.value; render(); };
   document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { st.metric = b.dataset.m; render(); });
 
-  const series = yr => MONTHS.map((_, m) => d.team.filter(x => x.ym === ym(yr, m)).reduce((a, x) => a + (x[st.metric] || 0), 0));
+  const series = yr => MONTHS.map((_, m) => sum(d.team.filter(x => x.ym === ym(yr, m)))[st.metric]);
   if (st.chart) { st.chart.destroy(); st.chart = null; }
   if (window.Chart) {
     st.chart = new Chart($('ch'), {
@@ -181,18 +280,30 @@ function render() {
       ] },
       options: { maintainAspectRatio: false, animation: { duration: 400 },
         plugins: { legend: { position: 'bottom', labels: { font: { size: 14 } } },
-          tooltip: { callbacks: { label: c => `${c.dataset.label}: ${Math.round(c.parsed.y).toLocaleString()} ${st.metric === 'h' ? 'hours' : st.metric === 'mi' ? 'miles' : 'functions'}` } } },
+          tooltip: { callbacks: { label: c => `${c.dataset.label}: ${Math.round(c.parsed.y).toLocaleString()} ${st.metric === 'h' ? 'hours' : st.metric === 'mi' ? 'miles' : 'missions & events'}` } } },
         scales: { y: { beginAtZero: true, ticks: { font: { size: 13 } } }, x: { ticks: { font: { size: 13 } } } } }
     });
   }
 }
 
-fetch(STATS_URL).then(r => r.json()).then(j => {
-  if (!j.ok) throw new Error(j.error || 'No data');
-  st.data = j.data; render();
-}).catch(() => {
-  $('main').innerHTML = section('Team Stats', '<p>Team stats are not available right now. Please check back later.</p>');
+document.addEventListener('click', () => document.querySelectorAll('.tile.open').forEach(x => x.classList.remove('open')));
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') document.querySelectorAll('.tile.open').forEach(x => x.classList.remove('open')); });
+
+document.querySelectorAll('#views button').forEach(b => b.onclick = () => {
+  st.view = b.dataset.v;
+  try { localStorage.setItem('sarView', st.view); } catch (e) {}
+  render();
 });
+
+Promise.all(Object.keys(FEEDS).map(k => fetch(FEEDS[k].url).then(r => r.json())
+  .then(j => { if (j.ok) st.feeds[k] = prep(j.data); }).catch(() => {})))
+  .then(() => {
+    if (!Object.keys(st.feeds).length) throw new Error('none');
+    render();
+  })
+  .catch(() => {
+    $('main').innerHTML = section('Team Stats', '<p>Team stats are not available right now. Please check back later.</p>');
+  });
 </script>
 </body>
 </html>
