@@ -138,8 +138,8 @@
 <script>
 /* Live team totals from each posse's Duty Log (numbers only, no names). */
 const FEEDS = {
-  east: { label: 'East Posse', url: 'https://script.google.com/macros/s/AKfycbxEvNAnlTXmXT5aq02fkyDnERltqtb9bQavgBwEdtMngg9Kor_mrzu_5adDEQMD5q-C/exec?view=stats' },
-  west: { label: 'West Posse', url: 'https://script.google.com/macros/s/AKfycbxFThRjmoVf-DIjqteTdCBKMw3_WwB1CcjQpYVxRdtLiinv1Y3-vq7D2Y01-jT4Dh7P/exec?view=stats' }
+  east: { label: 'East Posse', file: 'data/stats-east.json', url: 'https://script.google.com/macros/s/AKfycbxEvNAnlTXmXT5aq02fkyDnERltqtb9bQavgBwEdtMngg9Kor_mrzu_5adDEQMD5q-C/exec?view=stats' },
+  west: { label: 'West Posse', file: 'data/stats-west.json', url: 'https://script.google.com/macros/s/AKfycbxFThRjmoVf-DIjqteTdCBKMw3_WwB1CcjQpYVxRdtLiinv1Y3-vq7D2Y01-jT4Dh7P/exec?view=stats' }
 };
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const LABEL = { tf: 'Missions & events', h: 'Volunteer hours', mi: 'Miles driven' };
@@ -309,20 +309,39 @@ function showFreshness(state) {
   if (!state) el.remove();
 }
 
+/*
+ * Where the numbers come from, fastest first:
+ *  1. a numbers file on this website that each Duty Log keeps current (loads instantly)
+ *  2. each Duty Log's live feed on Google (slower; checked in the background to catch anything newer)
+ */
 const fresh = {};
-Promise.all(Object.keys(FEEDS).map(k => fetch(FEEDS[k].url).then(r => r.json())
-  .then(j => { if (j.ok) fresh[k] = prep(j.data); }).catch(() => {})))
+function useFresh(final) {
+  if (Object.keys(fresh).length) {
+    Object.keys(fresh).forEach(k => { st.feeds[k] = fresh[k]; });
+    try { localStorage.setItem('sarFeeds', JSON.stringify({ t: Date.now(), feeds: st.feeds })); } catch (e) {}
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    if (final && Object.keys(fresh).length < Object.keys(FEEDS).length && cachedAt) showFreshness('stale');
+  } else if (final && Object.keys(st.feeds).length) {
+    showFreshness('stale');
+  } else if (final) {
+    $('main').innerHTML = section('Team Stats', '<p>Team stats are not available right now. Please check back later.</p>');
+  }
+}
+const getJson = u => fetch(u, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+const seen = {};
+Promise.all(Object.keys(FEEDS).map(k => getJson(FEEDS[k].file + '?t=' + Date.now())
+  .then(j => { if (j.ok && j.data) { fresh[k] = prep(j.data); seen[k] = JSON.stringify(j.data.team) + j.data.hourRate + j.data.mileRate; } }).catch(() => {})))
   .then(() => {
-    if (Object.keys(fresh).length) {
-      Object.keys(fresh).forEach(k => { st.feeds[k] = fresh[k]; });
-      try { localStorage.setItem('sarFeeds', JSON.stringify({ t: Date.now(), feeds: st.feeds })); } catch (e) {}
-      const y = window.scrollY; render(); window.scrollTo(0, y);
-      if (Object.keys(fresh).length < Object.keys(FEEDS).length && cachedAt) showFreshness('stale');
-    } else if (Object.keys(st.feeds).length) {
-      showFreshness('stale');
-    } else {
-      $('main').innerHTML = section('Team Stats', '<p>Team stats are not available right now. Please check back later.</p>');
-    }
+    const all = Object.keys(fresh).length === Object.keys(FEEDS).length;
+    if (all) useFresh(false);
+    /* Then ask each Duty Log directly, in the background, for anything newer than the file */
+    return Promise.all(Object.keys(FEEDS).map(k => getJson(FEEDS[k].url)
+      .then(j => {
+        if (!j.ok) return;
+        const sig = JSON.stringify(j.data.team) + j.data.hourRate + j.data.mileRate;
+        if (seen[k] !== sig) { fresh[k] = prep(j.data); seen[k] = sig; seen.changed = true; }
+      }).catch(() => {})))
+      .then(() => { if (!all || seen.changed) useFresh(true); else showFreshness(null); });
   });
 </script>
 </body>
