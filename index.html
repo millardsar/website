@@ -295,14 +295,34 @@ document.querySelectorAll('#views button').forEach(b => b.onclick = () => {
   render();
 });
 
+// Show the numbers from this visitor's last visit right away, then swap in fresh ones when they arrive
+let cachedAt = null;
+try {
+  const c = JSON.parse(localStorage.getItem('sarFeeds') || 'null');
+  if (c && c.feeds && Object.keys(c.feeds).length) { st.feeds = c.feeds; cachedAt = c.t; render(); showFreshness('updating'); }
+} catch (e) {}
+
+function showFreshness(state) {
+  let el = $('fresh');
+  if (!el) { $('main').insertAdjacentHTML('afterbegin', '<p class="note" id="fresh" style="margin:0 0 10px"></p>'); el = $('fresh'); }
+  el.textContent = state === 'updating' ? 'Updating to the latest numbers…' : state === 'stale' ? "Couldn't reach the latest numbers; showing the last ones saved." : '';
+  if (!state) el.remove();
+}
+
+const fresh = {};
 Promise.all(Object.keys(FEEDS).map(k => fetch(FEEDS[k].url).then(r => r.json())
-  .then(j => { if (j.ok) st.feeds[k] = prep(j.data); }).catch(() => {})))
+  .then(j => { if (j.ok) fresh[k] = prep(j.data); }).catch(() => {})))
   .then(() => {
-    if (!Object.keys(st.feeds).length) throw new Error('none');
-    render();
-  })
-  .catch(() => {
-    $('main').innerHTML = section('Team Stats', '<p>Team stats are not available right now. Please check back later.</p>');
+    if (Object.keys(fresh).length) {
+      Object.keys(fresh).forEach(k => { st.feeds[k] = fresh[k]; });
+      try { localStorage.setItem('sarFeeds', JSON.stringify({ t: Date.now(), feeds: st.feeds })); } catch (e) {}
+      const y = window.scrollY; render(); window.scrollTo(0, y);
+      if (Object.keys(fresh).length < Object.keys(FEEDS).length && cachedAt) showFreshness('stale');
+    } else if (Object.keys(st.feeds).length) {
+      showFreshness('stale');
+    } else {
+      $('main').innerHTML = section('Team Stats', '<p>Team stats are not available right now. Please check back later.</p>');
+    }
   });
 </script>
 </body>
